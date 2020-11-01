@@ -8,7 +8,7 @@ import string
 import os
 import discord
 
-CLIENT_TOKEN = "NTQxMDI5NjE5MDUxMDAzOTM1.XFTPGQ.J9ykLljY5r76yP4s6cMUtWfoCos"
+CLIENT_TOKEN = ""
 
 # Templates for use later
 PRINT_PREFIX = string.Template("^XA^GB1980,0,0^LL$LabelLength ^FO10,10^ADN,24,18^FD $author ^FS")
