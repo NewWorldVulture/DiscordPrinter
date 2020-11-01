@@ -8,28 +8,27 @@ import string
 import os
 import discord
 
-CLIENT_TOKEN = ""
+CLIENT_TOKEN = "NTQxMDI5NjE5MDUxMDAzOTM1.XFTPGQ.J9ykLljY5r76yP4s6cMUtWfoCos"
 
 # Templates for use later
 PRINT_PREFIX = string.Template("^XA^GB1980,0,0^LL$LabelLength ^FO10,10^ADN,24,18^FD $author ^FS")
 PRINT_CONTENT = string.Template("^FO 30, $yCoord ^ADN,30,24^FD $text ^FS")
-PRINT_POSTFIX = "^XZ"
+PRINT_POSTFIX = string.Template("^GB830,$LabelLength2 ,10 ^XZ")
 
 # takes content of message and formats it into ZPL
 def createMessage(author, text):
-    text_len = len(text)
-
     # Split message every 44 characters.
-    text_parts = [text[i:i+44] for i in range(0, text_len, 44)]
-    label_len = len(text_parts) * 32 + 40
+    text_parts = [text[i:i+44] for i in range(0, len(text), 44)]
+    label_len = len(text_parts)*32 + 80
 
+    # Create message content
     message = PRINT_PREFIX.substitute(LabelLength=label_len, author=author)
 
     for c, line in enumerate(text_parts):
         yCoord = 40 + c*32
         message += PRINT_CONTENT.substitute(yCoord=yCoord, text=line)
 
-    message += PRINT_POSTFIX
+    message += PRINT_POSTFIX.substitute(LabelLength2=str(label_len-15))
     return message
 
 client = discord.Client()
@@ -55,7 +54,8 @@ async def on_message(message):
     #print(message.author + " : " + message.content)
 
     # Create print message
-    message_thing = PRINT_TEMPLATE.substitute(author=str(message.author)[:-5], content=createMessage(message.author, message.content))
+    message_thing = createMessage(str(message.author)[:-5], message.content)
+    print(message_thing)
     message_thing = bytes(message_thing, "utf-8")
 
     try:
